@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html >
+<head>
+	<title> Task 3</title>
+	<style type="text/CSS";>
+		#palindrom{ width: 100%;};
+	</style>
+	<script type="text/javascript">
+		function findPalindromes(){
+			var str = document.getElementById("phrase").value;
+			var words = str.split(' ');
+			var len = words.length;
+			var palCount = 0;
+			for( var i = 0; i < len; i++ ){
+				var wordsl = words[i].toLowerCase();
+				var lenl = wordsl.length;
+				var counter = 0;
+				for(var j = 0; j < lenl; j++){
+					if(wordsl.charAt(j)==wordsl.charAt(lenl-1-j)){
+						counter++;
+					}
+				}
+				if( counter == lenl ){
+					palCount++;
+					var list = document.getElementById("palList");
+					var li = document.createElement("li");
+					list.appendChild(li);
+					li.innerHTML = words[i];
+					if(palCount % 2 == 0 ){
+						li.style.backgroundColor = "grey";
+					}
+					/*var gettable = document.getElementById("palindrom");
+					var n = gettable.rows.length;
+					var row  = gettable.insertRow(n);
+					var cell = row.insertCell(0);
+					
+					cell.innerHTML = words[i];
+					
+					if(n%2 == 0){
+					row.style.backgroundColor = 'grey';
+					}*/
+				}
+			}
+			document.getElementById('count').innerHTML = palCount + ' total palindrome(s)';
+		}
+	</script>
+</head>
+</body>
+	<h1> Palindrome Finder! </h1>
+	<div> Phrase: <input id="phrase" value="LOL" type="text" size="70" /> </div>
+	<br>
+	<div> <button id="find" onclick="findPalindromes()"> Find Palindromes </button> </div>
+	<table id="palindrom"></table>
+	<ul id="palList"></ul>
+	<div id="count"></div>
+</body>
+</html>

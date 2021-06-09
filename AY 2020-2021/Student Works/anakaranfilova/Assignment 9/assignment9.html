@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Assignment 9</title>
+	<style type="text/CSS">
+		input, select{
+			display: block;
+			margin: 5px;
+			width: 200px;
+		}
+		button{
+			display: inline;
+			margin: 5px;
+			float: left;
+			width: 100px;
+			height: 40px;
+		}
+	</style>
+	<script type="text/javascript">
+		function uploadData(){
+			var input = document.getElementById("fullname");
+			var input_check = input.value.split(" ");
+            var l1 = input_check[0].charAt(0);
+            var l2 = input_check[1].charAt(0);
+                
+			if(l1 != l1.toUpperCase() || l2 != l2.toUpperCase()){
+				document.getElementById("fullname").style.backgroundColor = "red";
+			} else {
+				document.getElementById("fullname").style.backgroundColor = "white";
+				var output = document.getElementById("nameList");
+                var opt = document.createElement("option");
+				if(names(input.value)){
+				opt.text = input.value;
+				output.add(opt);}
+            }
+		}
+		function names(name){
+			var list = document.getElementById("nameList");
+			var el = document.getElementsByTagName("option");
+			for( var i=0; i< el.length; i++){
+				if(el[i].value == name){
+					return false;
+				}
+			}
+			return true;
+		}
+	</script>
+</head>
+<body>
+	<form>
+		<select id="nameList">
+		</select>
+		<input type="text" id="fullname">
+		<button type="button" onclick="uploadData()">Add</button>
+		<button type="clear">Clear</button>
+	</form>
+</body>
+</html>

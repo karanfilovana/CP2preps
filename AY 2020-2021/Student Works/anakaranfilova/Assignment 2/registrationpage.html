@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Registration Page</title>
+	<meta charset="UTF-8">
+	<style>
+		body{background-color:rgba(99, 99, 174, 0.3);}
+		h1 {background-color:black; text-align:center; color:rgba(126, 74, 231, 1);}
+		.topnav a {
+		  color: #f2f2f2;
+		  text-align: center;
+		  padding: 14px 16px;
+		  text-decoration: none;
+		  font-size: 17px;
+		}
+
+		.topnav a:hover {
+		  background-color: #ddd;
+		  color: black;
+		}
+
+		.topnav a.active {
+		  background-color: rgba(126, 74, 231, 1);
+		  color: white;
+		}
+	</style>
+</head>
+<body>
+	<h1>Registration</h1>
+	
+	<div class="topnav">
+	  <a  href="./mainpage.html#home" target="_blank">Home</a>
+	  <a class="active" href=#register >Register</a>
+	  <a href="./memepage.html" target="_blank">Memes</a>
+	  <br><br>
+	</div>
+	<hr color=purple>
+	<form action="confirmationpage.html" method="post">
+	<fieldset>
+	<legend><h3>Personal Information</h3></legend>
+		<label for="fname">Enter first name: </label>
+		<input type="text" name="fname" id="fname">
+		<label for="lname">Enter last name:</label>
+		<input type="text" name="lname" id="lname">
+		<br><br>
+		
+		<label for="gender">Gender:</label><br>
+		<input type="radio" name="gender" id="male">
+		<label for="male">Male</label>
+		<input type="radio" name="gender" id="female">
+		<label for="female">Female</label>
+		<input type="radio" name="gender" id="other">
+		<label for="other">Other</label>
+		<br><br>
+		
+		<label>Find your birthday: </label>
+		<input type="date" name="bday" id="bday" min="1970-01-01" max="2025-01-01">
+		<br><br>
+		
+		<label for="uname">Enter username: </label>
+		<input type="text" name="uname" id="uname"><br>
+		<label for="pswrd">Enter password:</label>
+		<input type="password" name="pswrd" id="pswrd">
+		<br><br>
+		
+		<label for="username">Confirm your username: </label>
+		<input type="text" name="username" id="username"><br>
+		<label for="pass">Confirm your password:</label>
+		<input type="password" name="pass" id="pass">
+		<br><br>
+	</fieldset>
+	<fieldset>
+	<legend><h3>Demografic Info</h3></legend>
+		<label for="reasons">Reasons for joining:</label><br>
+		<textarea name="reasons" id="reasons" rows="5" cols="35">Please enter your thoughts here.</textarea>
+		<br><br>
+	</fieldset>
+	
+		<br>
+		<input type="submit" name="submitbtn" id="submitbtn">
+	</form>
+	
+</body>
+</html>

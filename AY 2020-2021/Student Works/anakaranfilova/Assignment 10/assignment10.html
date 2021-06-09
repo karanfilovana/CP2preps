@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style>
+		#base{
+			width: 400px;
+			height: 400px;
+			display: flex;
+			flex-wrap: wrap;
+		}
+		.box {
+			display: flex;
+			float: left;
+			width: 100px;
+			height: 100px;
+			border: 2px solid red;
+			justify-content: center;
+			align-items: center;
+			margin: 5px;
+		}
+		.item {
+			display: flex;
+			width: 90px;
+			height: 90px;
+			background-color: seagreen;
+			justify-content: center;
+			align-items: center;
+			font-size: 50px;
+			color: yellow;
+			user-select: none;
+		}
+	</style>
+	<script>
+		function itemDragStart(event){
+			event.dataTransfer.setData("text", event.target.id);
+		} //endfunction itemDragStart
+		
+		function itemDragOver(event){
+			var targetBox = event.target;
+			event.preventDefault();
+		} //endfunction itemDragOver
+		
+		function itemDrop(event){
+			var targetBox = event.target;
+			targetBox.style.backgroundColor = "";
+			var draggedId = event.dataTransfer.getData("text");
+			var draggedItem = document.getElementById(draggedId);
+			if(targetBox.innerHTML == ""){
+				targetBox.appendChild(draggedItem);
+				event.preventDefault();
+				victoryCase();
+			}
+		} //endfuction itemDrop
+		
+		function itemDragEnter(event){
+			var targetBox = event.target;
+			targetBox.style.backgroundColor = "silver";
+			event.preventDefault();
+		} //endfunction itemDragEnter
+		
+		function itemDragLeave(event){
+			var targetBox = event.target;
+			targetBox.style.backgroundColor = "";
+			event.preventDeafault();
+		} //endfunction itemDragLeave
+		
+		function makeBoard(){
+				base = document.getElementById("base");
+				for ( nCtr = 0 ; nCtr < 9 ; nCtr++){
+					box = document.createElement("div");
+					box.classList.add("box");
+					box.id="box"+nCtr;
+					box.ondragover = function(){ itemDragOver(event); }
+					box.ondrop = function(){ itemDrop(event); }
+					base.appendChild(box);
+					if ( nCtr < 8 ){
+						item = document.createElement("div");
+						item.classList.add("item");
+						item.id="item"+nCtr;
+						item.setAttribute("draggable",true);
+						item.ondragstart = function(){ itemDragStart(event); }
+						box.appendChild(item);
+					}
+				}
+				letterArray()
+			} //endfunction makeBoard
+
+		function letterArray(){
+			cArray = [ "A" , "B" , "C" , "D" , "E" , "F" , "G" , "H" ];
+			for (let i = cArray.length - 1; i > 0; i--) {
+				const j = Math.floor(Math.random() * (i + 1));
+				[cArray[i], cArray[j]] = [cArray[j], cArray[i]];
+			}
+			 let items = document.getElementsByClassName("item");
+			for ( let nCtr = 0 ; nCtr < 8 ; nCtr++ ){
+				items[nCtr].innerHTML = cArray[nCtr] ;
+			}
+		} //endfuction letterArray
+		
+		function victoryCase(){
+			let items = document.getElementsByClassName("item");
+			wins = 0;
+			for (nCtr = 0; nCtr < 8; nCtr++){
+				if (items[nCtr].innerHTML.charCodeAt(0) == 65+nCtr){
+					wins++;
+				}
+			}
+			iKnowThisIsDumb = document.getElementById("box8");
+			if( wins == 8 && iKnowThisIsDumb.innerHTML == "" ){
+				window.alert("GAME WON!");
+				iKnowThisIsDumb.ondrop = "";
+			}
+		} //endfuction victoryCase
+	</script>
+</head>
+<body onload="makeBoard()">
+	<div id="base"></div>
+</body>
+</html>

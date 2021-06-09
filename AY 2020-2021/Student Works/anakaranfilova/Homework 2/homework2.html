@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Draw</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<style>
+		#canvas {
+			display: inline-block;
+			box-sizing: border-box;
+			border: 1px solid black;
+		}
+		#stickers {
+			display: inline-block;
+			width: 50px;
+			height: 50px;
+		}
+		.sticker {
+			display: inline-block;
+			box-sizing: border-box;
+			width: 50px;
+			margin: 2px;
+		}
+		.color {
+			display: inline-block;
+			box-sizing: border-box;
+			width: 48px;
+			height: 30px;
+			border: 1px solid black;
+			margin: 2px 1px 0px 1px;
+		}
+		input[type=range]{
+			margin-top: 10px;
+		}
+		button{
+			background-color: white;
+			border: 1px solid black;
+			border-radius: 15px;
+			font-size: 20px;
+		}
+		p{
+			font-size: 20px;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas" width="800" height="600" ondragover="dragOver(event)" ondrop="drop(event)"></canvas>
+	<div id="stickers">
+		<img class="sticker" id="text0" draggable="true" ondragstart="dragStart(event)" src="http://clipart-library.com/data_images/487831.png">
+		<img class="sticker" id="text1" draggable="true" ondragstart="dragStart(event)" src="http://clipart-library.com/data_images/487787.png">
+		<img class="sticker" id="text2" draggable="true" ondragstart="dragStart(event)" src="http://clipart-library.com/data_images/487743.png">
+		<img class="sticker" id="text3" draggable="true" ondragstart="dragStart(event)" src="http://clipart-library.com/data_images/487741.png">
+		<img class="sticker" id="text4" draggable="true" ondragstart="dragStart(event)" src="http://clipart-library.com/data_images/487815.png">
+		<img class="sticker" id="text5" draggable="true" ondragstart="dragStart(event)" src="http://clipart-library.com/data_images/402767.png">
+		<img class="sticker" id="text6" draggable="true" ondragstart="dragStart(event)" src="http://clipart-library.com/data_images/363964.gif">
+		<img class="sticker" id="text7" draggable="true" ondragstart="dragStart(event)" src="http://clipart-library.com/data_images/487785.png">
+		<img class="sticker" id="text8" draggable="true" ondragstart="dragStart(event)" src="http://clipart-library.com/data_images/487810.jpg">
+		<img class="sticker" id="text9" draggable="true" ondragstart="dragStart(event)" src="http://clipart-library.com/image_gallery/464509.png">
+		<img class="sticker" id="text10" draggable="true" ondragstart="dragStart(event)" src="http://clipart-library.com/image_gallery/464541.jpg">
+	</div>
+	<div>
+		<script>
+			var colorNames = ["black", "gray", "silver", "white", "maroon", "red", "olive", "yellow", "green",
+			"lime", "teal", "aqua", "navy", "blue", "purple", "fuchsia"];
+			for (var i = 0; i < 16; i++) {
+			document.write(`<div id="${i}" class="color" style="background-color:
+			${colorNames[i]}" 
+			onclick="addShadow(this)"
+			></div>`);
+			}
+		</script>
+	</div>
+	<input type="range" min="1" max="15" value="1" id="lineWidth" onchange="lineWidth()">
+	<p id="printWidth">Line width: 1</p>
+	<button type="button" id="eraser" onclick="eraseCanvas()"><i class="fa fa-eraser"></i></button>
+	<button onclick="clearCanvas()">Clear</button>
+	<script>
+		var palette = colorNames;
+		var id;
+		var range = 1;
+		var canvas = document.getElementById('canvas');
+		var ctx = canvas.getContext('2d');
+		var isDrawing;
+			
+		canvas.onmousedown = function(e) {
+		  isDrawing = true;
+		  ctx.beginPath();
+		  ctx.moveTo(e.clientX, e.clientY);
+		};
+		canvas.onmousemove = function(e) {
+			if (isDrawing) {
+				ctx.strokeStyle = palette[id];
+				ctx.lineWidth = range;
+				ctx.lineCap = "round";
+				ctx.lineTo(e.clientX, e.clientY);
+				ctx.stroke();
+					
+				}
+			};
+		canvas.onmouseup = function() {
+			isDrawing = false;
+		};
+			
+		function addShadow(element){
+			removeShadow()
+			element.style.boxShadow = "5px 5px 3px grey";
+			id = parseInt(element.getAttribute('id'));
+			}
+		function removeShadow(){
+			for (var i = 0; i < 16; i++){
+			var color = document.getElementById(i);
+			color.style.boxShadow = "";
+			}
+		}
+		function lineWidth(){
+			range = document.getElementById("lineWidth").value;
+			var result = document.getElementById("printWidth");
+			result.innerHTML = "Line width: " + range;
+		}
+		function eraseCanvas(){
+			id = 3;
+			range = 7;
+		}
+		function clearCanvas(){
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+		}
+		function dragStart(e) {
+			e.dataTransfer.setData("text", e.target.id);
+		}
+		function dragOver(e) {
+			event.preventDefault();
+		}
+		function drop(e) {			
+			var data = e.dataTransfer.getData("text");
+			var sticker= document.getElementById(data);
+			ctx.drawImage(sticker, e.clientX, e.clientY, 80, 80);
+		}
+	</script>
+</body>
+</html>

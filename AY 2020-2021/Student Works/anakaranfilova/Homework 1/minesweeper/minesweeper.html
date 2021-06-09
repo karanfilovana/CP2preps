@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>MINESWEEPER</title>
+	<link rel="stylesheet" type="text/css" href="minesweeperStyle.css">
+	<link rel="stylesheet"	href="https://fonts.googleapis.com/css?family=Audiowide&effect=fire|neon|outline|emboss|shadow-multiple">
+	<script src="minefield.js"></script>
+	<script type="text/javascript">
+		let starCount = 1;
+		function selectLevel(){
+			var levels = document.getElementById("levels");
+			document.getElementById("status").innerHTML = "";
+			if(levels.value == "Beginner"){
+				minefield = new Minefield(10, 10, 10);
+				makeBoard()
+			} else if(levels.value == "Intermediate"){
+				minefield = new Minefield(16, 16, 40);
+				makeBoard()
+			} else{
+				minefield = new Minefield(16, 30, 99);
+				makeBoard()
+			}
+		}
+		function makeBoard(x,y,z){
+			var table = document.getElementById("board");
+			table.innerHTML = "";
+			this.mines = z;
+			for( var i = 0 ; i < minefield.width; i++){
+				var row = table.insertRow(i);
+				for(var j = 0; j< minefield.height; j++){
+					var cell = row.insertCell(j);
+					cell.setAttribute("id",i); 
+					cell.setAttribute("data",j);
+					cell.onclick = function(){
+						reveal(this);
+					}
+					cell.oncontextmenu = function(e) { 
+						e.preventDefault(); 
+						flag(this)
+					}	
+				}
+			}
+			
+		}
+		function reveal(cell){
+			var x = cell.id;
+			var y = cell.getAttribute("data");
+			minefield.unveil(x, y);
+			var field = minefield.field;
+			console.log(field);
+			if(!cell.classList.contains("BOMB") && !cell.classList.contains("flaged")){
+				if( field[x][y] > 0 && field[x][y] != 'x'){
+					cell.innerHTML = field[x][y];
+					cell.classList.add("unveiled");
+				} else if ( field[x][y] == 0){
+					expand();
+				} else {
+					gameOver();
+				}
+			}
+		}
+		function expand(){
+			var squares = document.getElementsByTagName("td");
+			var veiled = minefield.veil;
+			var field = minefield.field;
+			console.log(veiled);
+			var n = 0;
+			for( var i = 0 ; i < minefield.width; i++){
+				for(var j = 0; j< minefield.height; j++){
+					if(!veiled[i][j] && field[i][j] != 'x' && !squares[n].classList.contains("flaged")){
+						squares[n].innerHTML = field[i][j];
+						squares[n].classList.add("unveiled");
+						
+					}
+					n++;
+				}
+			}
+		}
+		function flag(cell){
+			var mines = minefield.mines;
+			if(cell.classList.length == 0 && !( mines < starCount)){
+				cell.innerHTML = '⭐';
+				cell.classList.add("flaged");
+				starCount=starCount+1;
+				
+			}else if(cell.classList.contains("flaged")){
+				cell.innerHTML = "";
+				cell.classList.remove("flaged");
+				starCount=starCount-1;console.log(mines);
+			}
+			gameWon()
+		}
+		function gameOver(){
+			var bombs = document.getElementsByTagName("td");
+			var field = minefield.field;
+			var n = 0;
+			for( var i = 0 ; i < minefield.width; i++){
+				for(var j = 0; j< minefield.height; j++){
+					if(field[i][j] == 'x'){
+						bombs[n].innerHTML = "💥";	
+					}
+					bombs[n].classList.add("BOMB");
+					n++;
+				}
+			}
+			document.getElementById("status").innerHTML = "!!Obliviated!! GAME OVER";
+		}
+		function gameWon(){
+			var mines = minefield.mines; 
+			var field = minefield.field;
+			var squares = document.getElementsByTagName("td");
+			var count = 0;
+			var n = 0;
+			for( var i = 0 ; i < minefield.width; i++){
+				for(var j = 0; j< minefield.height; j++){
+					if(squares[n].classList.contains("flaged") && field[i][j] == "x"){
+						count++	
+					}
+					n++;
+				}
+			}
+			if(mines == count){
+				document.getElementById("status").innerHTML = "GAME WON";
+			}
+		}
+
+	</script>
+</head>
+<body>
+	<h1>Minesweeper</h1>
+	<label for="levels">Choose battlefield:</label>
+	<select id="levels" onchange="selectLevel()">
+		<option>Beginner</option>
+		<option>Intermediate</option>
+		<option>Expert</option>
+	</select>
+	<button type="button" onclick="selectLevel()">New Game</button>
+	<table id="board" class="grid"></table>
+	<p id="status"></p>
+	<script>selectLevel()</script>
+</body>
+</html>
